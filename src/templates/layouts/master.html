@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <link href="https://bootswatch.com/flatly/bootstrap.min.css" rel="stylesheet">
+    <title>Flask-note</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1 class="text-center">
+          <small>Flask-note</small>
+        </h1>
+      </div>
+      <div class="row">
+        {% block contain %}
+        {% endblock %}
+      </div>
+    </div>
+  </body>
+</html>

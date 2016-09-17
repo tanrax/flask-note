@@ -1,0 +1,127 @@
+* PyConES16: Flask-note > Clone of Evernote with Flask
+
+** [[https://flasknote.fenollosa.work][DEMO]]
+  
+#+CAPTION: Flask-note 
+#+NAME: Flask-note 
+[[file:sketching/PNG/dashboard.png]]
+
+** Install
+  
+*** Flask
+
+#+BEGIN_SRC bash
+mkdir flask-note
+cd flask-note
+pip install virtualenv
+virtualenv ENV
+source ENV/bin/activate
+pip install Flask
+pip install markdown
+#+END_SRC
+    
+*** SQLite
+
+**** OS X
+#+BEGIN_SRC bash
+brew install sqlite
+#+END_SRC
+     
+**** Ubuntu
+#+BEGIN_SRC bash
+sudo apt-get update
+sudo apt-get install sqlite3 libsqlite3-dev
+#+END_SRC
+     
+*** Flask_sqlalchemy
+    
+#+BEGIN_SRC bash
+pip install flask_sqlalchemy
+#+END_SRC
+  
+** Create Flask 
+   
+Create *app.py*   
+
+#+BEGIN_SRC python
+from flask import Flask
+app = Flask(__name__)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            session.clear()
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route('/')
+def hello():
+    return 'Hello PyConES!'
+
+if __name__ == "__main__":
+    app.run()
+#+END_SRC
+
+#+BEGIN_SRC bash
+python app.py
+#+END_SRC
+
+Open in your browser
+
+http://127.0.0.1:5000/
+
+** Create Database
+
+Create *database.py*   
+
+#+BEGIN_SRC python 
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite'
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(32))
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+
+    def __repr__(self):
+        return '<User {email}>'.format(email=self.email)
+
+
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), unique=True)
+    text = db.Column(db.Text())
+
+    def __init__(self, title, text):
+        self.title = title
+        self.text = text
+
+    def __repr__(self):
+        return '<Note {title}>'.format(title=self.title)
+
+#+END_SRC
+
+#+BEGIN_SRC bash
+python
+from database import db
+db.create_all()
+exit()
+sqlite3 database.sqlite
+#+END_SRC
+   
+#+BEGIN_SRC sql
+INSERT INTO user VALUES (NULL, 'py@con.es', '2016');
+.exit
+#+END_SRC
+

@@ -1,0 +1,21 @@
+{% extends 'layouts/master.html' %}
+{% block contain %}
+{% if data['error'] %}
+<div class="row">
+  <div class="alert alert-danger" role="alert">
+    <strong>Error</strong> Email or password incorrect
+  </div>
+</div>
+{% endif %}
+<div class="row">
+  <form method="post" action="{{ url_for('login') }}">
+    <div class="form-group">
+      <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="{{ data['email'] }}">
+    </div>
+    <div class="form-group">
+      <input type="password" class="form-control" id="password" placeholder="Password" name="password" value="{{ data['password'] }}">
+    </div>
+    <button type="submit" class="btn btn-default center-block">Login</button>
+  </form>
+</div>
+{% endblock %}

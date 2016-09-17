@@ -1,0 +1,62 @@
+{% extends 'layouts/master.html' %}
+{% block contain %}
+<div class="row">
+  <div class="col-sm-4">
+    <form action="{{ url_for('search') }}" method="get">
+      <div class="input-group">
+        <input name="q" type="text" class="form-control" placeholder="Search for...">
+        <span class="input-group-btn">
+          <button class="btn btn-secondary" type="submit">Go!</button>
+        </span>
+      </div>
+    </form>
+  </div>
+  <div class="col-sm-8 text-right">
+    <strong>{{ session['user_email'] }}</strong>
+    <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
+  </div>
+</div>
+<br/>
+<div class="row">
+  <div class="col-xs-6">
+    <a href="{{ url_for('new') }}" class="btn btn-success">New</a>
+  </div>
+  <div class="col-xs-6 text-right">
+    {%- if data.main_note -%}
+    <a href="{{ url_for('edit', id=data.main_note.id) }}" class="btn btn-warning">Edit</a>
+    <a href="{{ url_for('delete', id=data.main_note.id) }}" class="btn btn-danger">Delete</a>
+    {% endif %}
+  </div>
+</div>
+<br/>
+<div class="row">
+  <div class="col-xs-4">
+    <div class="list-group">
+      {% for note in data.notes %}
+      <a href="{{ url_for('dashboard', id=note.id) }}" class="list-group-item">
+        <h4 class="list-group-item-heading">{{ data.markdown(note.title)|safe }}</h4>
+        <p class="list-group-item-text">
+          {%- if note.text|length > 140 -%}
+          {{ data.markdown(note.text[:140] + '...')|safe }}
+          {% else %}
+          {{ data.markdown(note.text)|safe }}
+          {% endif %}
+        </p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-xs-8">
+    {%- if data.main_note -%}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h3>
+          {{ data.markdown(data.main_note.title)|safe }}
+        </h3>
+        {{ data.markdown(data.main_note.text)|safe }}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

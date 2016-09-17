@@ -1,0 +1,24 @@
+{% extends 'layouts/master.html' %}
+{% block contain %}
+<div class="row text-right">
+  <strong>{{ session['user_email'] }}</strong>
+  <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
+</div>
+<br/>
+<form action="{{ url_for('edit_note') }}" method="post">
+  <input name="id" type="hidden" value="{{ data.main_note.id }}"/>
+  <div class="row">
+    <div class="col-xs-6">
+      <a href="{{ url_for('dashboard') }}" class="btn btn-danger">Back</a>
+    </div>
+    <div class="col-xs-6 text-right">
+      <button type="submit" class="btn btn-success">Edit</button>
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <input type="text" name="title" class="form-control" required value="{{ data.main_note.title }}">
+    <textarea name="text" class="form-control" rows="10" required>{{ data.main_note.text }}</textarea>
+  </div>
+</form>
+{% endblock %}
