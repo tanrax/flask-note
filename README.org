@@ -1,10 +1,10 @@
-* PyConES16: Flask-note > Clone of Evernote with Flask
+* PyConES16: Flask-note  (Clone of Evernote with Flask and Markdown)
 
 ** [[https://flasknote.fenollosa.work][DEMO]]
   
 #+CAPTION: Flask-note 
 #+NAME: Flask-note 
-[[file:sketching/PNG/dashboard.png]]
+[[file:sketching/target.jpg]]
 
 ** Install
   
