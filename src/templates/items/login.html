@@ -1,21 +1,31 @@
 {% extends 'layouts/master.html' %}
 {% block contain %}
-{% if data['error'] %}
+{% if data['error'] and data['error'] == 'login' %}
 <div class="row">
   <div class="alert alert-danger" role="alert">
     <strong>Error</strong> Email or password incorrect
   </div>
 </div>
 {% endif %}
+{% if data['error'] and data['error'] == 'register' %}
+<div class="row">
+  <div class="alert alert-danger" role="alert">
+    <strong>Error</strong> Email exists
+  </div>
+</div>
+{% endif %}
 <div class="row">
   <form method="post" action="{{ url_for('login') }}">
     <div class="form-group">
-      <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="{{ data['email'] }}">
+      <input type="email" class="form-control" required id="email" placeholder="Email" name="email" value="{{ data['email'] }}">
     </div>
     <div class="form-group">
-      <input type="password" class="form-control" id="password" placeholder="Password" name="password" value="{{ data['password'] }}">
+      <input type="password" class="form-control" required id="password" placeholder="Password" name="password" value="{{ data['password'] }}">
     </div>
-    <button type="submit" class="btn btn-default center-block">Login</button>
+    <div class="text-center">
+      <button type="submit" class="btn btn-default" name="action" value="login">LogIn</button>
+      <button type="submit" class="btn btn-default" name="action" value="signup">SignUp</button>
+    </div>
   </form>
 </div>
 {% endblock %}

@@ -26,21 +26,33 @@ def index(data=None):
 @app.route('/login', methods=['POST'])
 def login():
     data = dict()
-    if request.form['email'] and request.form['password']:
-        # Checks if the user exists
+    if request.form['action'] and request.form['email'] and request.form['password']:
         data['email'] = request.form['email']
         data['password'] = request.form['password']
-        my_user = User.query.filter_by(
-            email=data['email'], password=data['password']).first()
-        if my_user:
-            # Create user session
-            session['user_id'] = my_user.id
-            session['user_email'] = my_user.email
-            return redirect(url_for('dashboard'))
-        else:
-            data['error'] = True
-    else:
-        data['error'] = True
+        if request.form['action'] == 'signup':
+            # New user
+            # Email check
+            my_user = User.query.filter_by(
+                email=data['email']).first()
+            if not my_user:
+                # Create
+                my_user = User(data['email'], data['password'])
+                db.session.add(my_user)
+                db.session.commit()
+            else:
+                data['error'] = 'register'
+
+        # Checks if the user exists
+        if 'error' not in data:
+            my_user = User.query.filter_by(
+                email=data['email'], password=data['password']).first()
+            if my_user:
+                # Create user session
+                session['user_id'] = my_user.id
+                session['user_email'] = my_user.email
+                return redirect(url_for('dashboard'))
+            else:
+                data['error'] = 'login'
 
     return index(data)
 
@@ -162,4 +174,5 @@ def delete_note():
 # App
 if __name__ == "__main__":
     app.secret_key = 'secret'
+    app.debug = True
     app.run()
