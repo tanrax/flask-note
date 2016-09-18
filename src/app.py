@@ -6,10 +6,9 @@ from database import db, User, Note
 
 app = Flask(__name__)
 
-# Decoration: check login in session
-
 
 def login_required(f):
+    # Decoration: check login in session
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
@@ -64,7 +63,8 @@ def dashboard(my_param_note=None):
     my_notes = my_param_note
     if not my_notes:
         # Nothing found
-        my_notes = Note.query.order_by(Note.id.desc()).all()
+        my_notes = Note.query.filter_by(
+            user_id=session['user_id']).order_by(Note.id.desc()).all()
     if my_notes:
         # Show first result
         my_main_note = my_notes[0]
@@ -92,7 +92,7 @@ def search():
 
     return dashboard(Note.query.filter(
         or_(Note.title.like('%' + q + '%'), Note.text.like('%' + q + '%')
-            )).all())
+            )).filter_by(user_id=session['user_id']).order_by(Note.id.desc()).all())
 
 
 @app.route('/new')
@@ -104,7 +104,8 @@ def new():
 @app.route('/new/save', methods=['POST'])
 @login_required
 def save_note():
-    myNote = Note(request.form['title'], request.form['text'])
+    myNote = Note(request.form['title'], request.form[
+                  'text'], session['user_id'])
     # Create
     db.session.add(myNote)
     db.session.commit()
