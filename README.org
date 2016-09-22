@@ -45,6 +45,7 @@ Create *app.py*
 
 #+BEGIN_SRC python
 from flask import Flask
+from functools import wraps
 app = Flask(__name__)
 
 def login_required(f):
