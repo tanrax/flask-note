@@ -128,7 +128,9 @@ INSERT INTO user VALUES (NULL, 'py@con.es', '2016');
 .exit
 #+END_SRC
 
-Future resource: *master.html*
+** Future resource 
+
+*master.html*
 #+BEGIN_SRC html
 <!doctype html>
 <html lang="en">
