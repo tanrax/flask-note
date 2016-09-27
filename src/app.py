@@ -5,7 +5,7 @@ from markdown import markdown
 from database import db, User, Note
 
 app = Flask(__name__)
-
+app.secret_key = 'secret'
 
 def login_required(f):
     # Decoration: check login in session
@@ -170,9 +170,3 @@ def delete_note():
     db.session.commit()
 
     return redirect(url_for('dashboard', id=id))
-
-# App
-if __name__ == "__main__":
-    app.secret_key = 'secret'
-    app.debug = True
-    app.run()
