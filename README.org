@@ -1,13 +1,13 @@
 * PyConES16: Flask-note  (Clone of Evernote with Flask and Markdown)
 
 ** [[http://flask-note.programadorwebvalencia.com/][DEMO]]
-  
-#+CAPTION: Flask-note 
-#+NAME: Flask-note 
+
+#+CAPTION: Flask-note
+#+NAME: Flask-note
 [[file:sketching/target.jpg]]
 
 ** Install
-  
+
 *** Flask
 
 #+BEGIN_SRC bash
@@ -19,29 +19,29 @@ source ENV/bin/activate
 pip install Flask
 pip install markdown
 #+END_SRC
-    
+
 *** SQLite
 
 **** OS X
 #+BEGIN_SRC bash
 brew install sqlite
 #+END_SRC
-     
+
 **** Ubuntu
 #+BEGIN_SRC bash
 sudo apt-get update
 sudo apt-get install sqlite3 libsqlite3-dev
 #+END_SRC
-     
+
 *** Flask_sqlalchemy
-    
+
 #+BEGIN_SRC bash
 pip install flask_sqlalchemy
 #+END_SRC
-  
-** Create Flask 
-   
-Create *app.py*   
+
+** Create Flask
+
+Create *app.py*
 
 #+BEGIN_SRC python
 from flask import Flask
@@ -75,9 +75,9 @@ http://127.0.0.1:5000/
 
 ** Create Database
 
-Create *database.py*   
+Create *database.py*
 
-#+BEGIN_SRC python 
+#+BEGIN_SRC python
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -122,13 +122,13 @@ db.create_all()
 exit()
 sqlite3 database.sqlite
 #+END_SRC
-   
+
 #+BEGIN_SRC sql
 INSERT INTO user VALUES (NULL, 'py@con.es', '2016');
 .exit
 #+END_SRC
 
-** Future resource 
+** Future resource
 
 *master.html*
 #+BEGIN_SRC html
