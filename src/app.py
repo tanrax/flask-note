@@ -5,6 +5,7 @@ from markdown import markdown
 from database import db, User, Note
 
 app = Flask(__name__)
+app.secret_key = 'secret'
 
 
 def login_required(f):
@@ -26,7 +27,9 @@ def index(data=None):
 @app.route('/login', methods=['POST'])
 def login():
     data = dict()
-    if request.form['action'] and request.form['email'] and request.form['password']:
+    if (request.form['action'] and
+            request.form['email'] and
+            request.form['password']):
         data['email'] = request.form['email']
         data['password'] = request.form['password']
         if request.form['action'] == 'signup':
@@ -38,7 +41,10 @@ def login():
                 # Create
                 my_user = User(data['email'], data['password'])
                 db.session.add(my_user)
-                db.session.commit()
+                try:
+                    db.session.commit()
+                except:
+                    db.session.rollback()
             else:
                 data['error'] = 'register'
 
@@ -104,7 +110,8 @@ def search():
 
     return dashboard(Note.query.filter(
         or_(Note.title.like('%' + q + '%'), Note.text.like('%' + q + '%')
-            )).filter_by(user_id=session['user_id']).order_by(Note.id.desc()).all())
+            )).filter_by(user_id=session['user_id']).order_by(
+            Note.id.desc()).all())
 
 
 @app.route('/new')
@@ -120,7 +127,10 @@ def save_note():
                   'text'], session['user_id'])
     # Create
     db.session.add(myNote)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
 
     return redirect(url_for('dashboard'))
 
@@ -143,7 +153,10 @@ def edit_note(data=None):
         my_note = Note.query.filter_by(id=request.form['id']).first()
         my_note.title = request.form['title']
         my_note.text = request.form['text']
-        db.session.commit()
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
 
     return redirect(url_for('dashboard'))
 
@@ -167,12 +180,9 @@ def delete_note():
     # Delete
     my_note = Note.query.filter_by(id=id).first()
     db.session.delete(my_note)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
 
     return redirect(url_for('dashboard', id=id))
-
-# App
-if __name__ == "__main__":
-    app.secret_key = 'secret'
-    app.debug = True
-    app.run()

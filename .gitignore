@@ -1,2 +1,3 @@
 src/ENV
-src/database.sqlite
+log.err
+log.info
